@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react'
-import useFormValidator from './FormValidator/index'
-import ErrorMessage from './FormValidator/ErrorMessage'
+import React, { useEffect, useRef } from 'react'
+import { useHistory } from 'react-router-dom'
+import {useFormValidator} from './../FormValidator'
+import ErrorMessage from './../FormValidator/ErrorMessage'
 
 const Login = () => {
 
     let inputRef = useRef()
+    let history = useHistory()
 
     let initialState = {
         email: null,
@@ -16,22 +18,36 @@ const Login = () => {
     };
 
     const {
-            onHandleChange,
-            onHandleSubmit,
-            formState
-        } = useFormValidator(initialState);
+        onHandleSubmit,
+        onHandleChange,
+        formState
+    } = useFormValidator(initialState)
 
     useEffect(() => {
         inputRef.current.focus();
     }, [])
 
-    const {errors} = formState;
+    const onLogin = (event) => {
 
-    console.log(errors)
+        event.preventDefault()
+
+        const {email, password, errors} = formState
+
+        if(onHandleSubmit(event)){
+            if (email === 'admin@admin.com' && password === 'deep@123') {
+                history.push('/home')
+            }
+            else{
+                alert("Login credential is not matched!")
+            }
+        }
+    }    
+
+    const { errors } = formState
 
     return (
         <div className="text-center" style={{margin: "100px"}}>
-            <form className="form-label" onSubmit={onHandleSubmit}>
+            <form className="form-label" onSubmit={(event) => onLogin(event)}>
                 <img className="mb-4" src="/assets/public/dist/img/user-login.jpg" alt="" width="72" height="72" />
                 <h1 className="h3 mb-3">Please sign in</h1>
                 <div className="row">
@@ -45,7 +61,7 @@ const Login = () => {
                             placeholder="Email address" 
                             required
                             onChange={onHandleChange} />
-                            <ErrorMessage errorMsg={errors.email}/>
+                            {errors.email.length > 0 && <ErrorMessage errorMsg={errors.email} />}
                     </div>
                 </div>
                 <div className="row">
@@ -60,7 +76,7 @@ const Login = () => {
                             placeholder="Password" 
                             required
                             onChange={onHandleChange} />
-                            <ErrorMessage errorMsg={errors.password}/>
+                            {errors.password.length > 0 && <ErrorMessage errorMsg={errors.email} />}
                     </div> 
                 </div>
                 <div className="m-2">

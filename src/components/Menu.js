@@ -1,7 +1,27 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 const Menu = () => {
+
+    const menus = {
+        'Customer': [
+            'List Customer',
+            'Add Customer'
+        ],
+        'Products': [
+            'List Product',
+            'Add Product'
+        ]
+    }
+
+    const { slug } = useParams()
+    //console.log(slug)
+
+    useEffect(() => {
+        const trees = window.$('[data-widget="treeview"]');
+        trees.Treeview('init');
+    }, [])
+
     return(
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
         <Link to="/home" className="brand-link">
@@ -21,7 +41,7 @@ const Menu = () => {
 
             <nav className="mt-2">
             <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li className="nav-item has-treeview">
+                <li className="nav-item has-treeview menu-open">
                 <a href="#" className="nav-link active">
                     <i className="nav-icon fas fa-tachometer-alt"></i>
                     <p>
@@ -31,13 +51,13 @@ const Menu = () => {
                 </a>
                 <ul className="nav nav-treeview">
                     <li className="nav-item">
-                    <Link to="/customer/list" className="nav-link">
+                    <Link to="/customer/list" className={`nav-link ${slug == 'list' ? 'active' : ''}`}>
                         <i className="far fa-circle nav-icon"></i>
                         <p>List Customer</p>
                     </Link>
                     </li>
                     <li className="nav-item">
-                    <Link to="/customer/add" className="nav-link">
+                    <Link to="/customer/add" className={`nav-link ${slug == 'add' ? 'active' : ''}`}>
                         <i className="far fa-circle nav-icon"></i>
                         <p>Add Customer</p>
                     </Link>
