@@ -5,7 +5,8 @@ import Home from './components/Home';
 import Navbar from './components/Navbar';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
-import List from './containers/CustomerContainer'
+//import List from './containers/CustomerContainer'
+import List from './containers/HooksCustomerContainer'
 import Add from './components/customer/Add'
 
 const App = () => {
