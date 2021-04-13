@@ -7,7 +7,7 @@ import Menu from './components/Menu';
 import Footer from './components/Footer';
 //import List from './containers/CustomerContainer'
 import List from './containers/HooksCustomerContainer'
-import Add from './components/customer/Add'
+import Add from './containers/HooksCustomerContainer'
 
 const App = () => {
     return(

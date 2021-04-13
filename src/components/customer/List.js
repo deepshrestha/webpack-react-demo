@@ -1,6 +1,7 @@
-import React, { useReducer } from 'react'
+import React from 'react'
 
-const CustomerList = ({data, onGetDataHandler}) => {   
+const CustomerList = ({data, onGetDataHandler}) => {
+
     return (
         <div className="content-wrapper">
             This is customer list page.
@@ -16,6 +17,7 @@ const CustomerList = ({data, onGetDataHandler}) => {
                             <th scope="col">Customer Name</th>
                             <th scope="col">City</th>
                             <th scope="col">Zone</th>
+                            <th scope="col">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -27,6 +29,9 @@ const CustomerList = ({data, onGetDataHandler}) => {
                                             <td>{customer.CustomerName}</td>
                                             <td>{customer.City}</td>
                                             <td>{customer.Zone}</td>
+                                            <td>
+                                                <button onClick={() => onGetDataHandler(customer.CustomerID)}>Edit</button>
+                                            </td>
                                         </tr>
                                     )
                                                     

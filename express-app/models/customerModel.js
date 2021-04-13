@@ -9,20 +9,22 @@ mongoose.connect(
 
 const customerSchema = mongoose.Schema(
     {
-        _id: String
-    },
-    {
-        City: String
-    },
-    {
-        CustomerID: Number
-    },
-    {
-        Zone: String
-    },
-    {
-        CustomerName: String
-    }
+        _id: {
+            type: String
+        },
+        City: {
+            type: String
+        },
+        CustomerID: {
+            type: Number
+        },
+        Zone: {
+            type: String
+        },
+        CustomerName: {
+            type: String
+        }
+    }    
 )
 
 module.exports = mongoose.model('customer', customerSchema)
