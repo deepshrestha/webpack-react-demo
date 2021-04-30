@@ -5,9 +5,10 @@ import Home from './components/Home';
 import Navbar from './components/Navbar';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
-//import List from './containers/CustomerContainer'
-import List from './containers/HooksCustomerContainer'
-import Add from './containers/HooksCustomerContainer'
+//import CustomerList from './containers/CustomerContainer'
+import CustomerList from './containers/HooksCustomerContainer'
+import CustomerAdd from './containers/AddCustomerContainer'
+import CustomerEdit from './containers/EditCustomerContainer'
 
 const App = () => {
     return(
@@ -19,10 +20,11 @@ const App = () => {
                 </Route>
                 <Route path="/customer/:slug">
                     <Home>
-                        <Navbar />     
+                        <Navbar /> 
                         <Menu />
-                            <Route path="/customer/list" component={List} />
-                            <Route path="/customer/add" component={Add} />
+                            <Route exact path="/customer/list" component={CustomerList} />
+                            <Route path="/customer/add" component={CustomerAdd} />
+                            <Route path="/customer/edit/:id" component={CustomerEdit} />
                         <Footer />
                     </Home>
                 </Route>

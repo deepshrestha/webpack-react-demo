@@ -1,59 +1,50 @@
-import React, { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { onFetchCustomerData } from './../actions/customerAction'
-import { apiHandler } from './../api/apiHandler'
-import CustomerList from './../components/customer/List'
-import CustomerAdd from './../components/customer/Add'
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  onFetchCustomerData,
+  onFetchTotalCustomerData,
+  onDeleteCustomerData
+} from "./../actions/customerAction";
+import { apiHandler } from "./../api/apiHandler";
+import CustomerList from "./../components/customer/CustomerList";
 
-const HooksCustomerContainer = (props) => {
+const HooksCustomerContainer = () => {
+  const count = useSelector((state) => state.customer.count);
+  const customers = useSelector((state) => state.customer.customers);
+  const dispatch = useDispatch();
 
-    const [component, setComponent] = useState('')
-    const { match } = props
+  //console.log(customers)
 
-    const data = useSelector(state => state)
-    const dispatch = useDispatch()
+  useEffect(() => {
+    onGetCustomerDataHandler();
+    onGetCountCustomerDataHandler();
+  }, []);
 
-    useEffect(() => {
-        switch(match.path){
-            case '/customer/add':                
-                setComponent('add')
-                break
-            case '/customer/list':
-                setComponent('list')
-                break
-        }
-    }, [])
+  const onGetCountCustomerDataHandler = () => {
+    apiHandler(`http://localhost:3000/api/count`, "get")
+      .then((result) => {
+        //console.log(result)
+        dispatch(onFetchTotalCustomerData(result));
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 
-    const onGetDataHandler = (id) => {
+  const onGetCustomerDataHandler = (id) => {
+    if (isNaN(id)) id = "";
 
-        if(isNaN(id))
-            id = ''
-        
-        apiHandler(`http://localhost:3000/api/customerdata/${id}`, 'get')
-        .then(result => {
-            dispatch(
-                onFetchCustomerData(result)
-            )
-        })
-        .catch(err => {
-            alert(err)
-        })
-    }
+    apiHandler(`http://localhost:3000/api/customerdata/${id}`, "get")
+      .then((result) => {
+        //console.log(result)
+        dispatch(onFetchCustomerData(result));
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 
-    const onAddCustomerData = (event) => {
-        event.preventDefault()
-        apiHandler(`http://localhost:3000/api/customerdata`, 'post')
-        .then(() => {
-            return {
-                success: "data has been inserted successfully"
-            }
-        })
-        .catch(err => {
-            alert(err)
-        })
-    }
-
-    /* const onGetDataByIdHandler = (id) => {
+  /* const onGetDataByIdHandler = (id) => {
         console.log(id)
         apiHandler(`http://localhost:3000/api/customerdata/${id}`)
         .then(result => {
@@ -66,16 +57,26 @@ const HooksCustomerContainer = (props) => {
         })
     } */
 
-    return (
-        <>
-        {
-            (component === 'list') ?
-            <CustomerList data={data} onGetDataHandler={onGetDataHandler} />
-            :
-            <CustomerAdd onAddCustomerData={onAddCustomerData}/>        
-        }
-        </>
-    )
-}
+  const onDeleteCustomerDataHandler = (e, id) => {
+    e.preventDefault();
+    apiHandler(`http://localhost:3000/api/customerdata/delete/${id}`, "delete")
+      .then((result) => {
+        dispatch(onDeleteCustomerData(count))
+        dispatch(onFetchCustomerData(result));
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 
-export default HooksCustomerContainer
+  return (
+    <CustomerList
+      count={count}
+      customers={customers}
+      onGetCustomerDataHandler={onGetCustomerDataHandler}
+      onDeleteCustomerDataHandler={onDeleteCustomerDataHandler}
+    />
+  );
+};
+
+export default HooksCustomerContainer;
